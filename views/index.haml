@@ -1,0 +1,15 @@
+%h1 Henk
+
+%pre= @test
+
+%h3 Organisaties
+%ul
+  - @github.orgs.list.each do |org|
+    %li= org.login
+    %li
+      %ul
+        %li
+          %pre= github.orgs.get(org.login).repos
+%ul
+  - @github.repos.list.each do |repos|
+    %li= repos.name
