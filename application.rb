@@ -46,8 +46,8 @@ class Application < Sinatra::Base
   end
 
   get '/repos/:user/:repo' do
-    # @organization = organization(params[:user])
-    # @repo = repo(params[:user], params[:repo])
+    @organization = organization(params[:user])
+    @repo = repo(params[:user], params[:repo])
     haml :repos
   end
 
