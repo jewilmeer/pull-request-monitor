@@ -5,13 +5,13 @@
   - if authorized?
     %h3 Organisaties
     %ul
-      - @github.orgs.list.each do |org|
+      - organizations.each do |organization|
         %li
-          = org.login
+          = organization.login
           %ul
-            - @github.orgs.teams.list org.login do |team|
+            - teams(organization).each do |team|
               %li
-                %a{href: url("/teams/#{team.id}")}= team.name
+                %a{href: url("/organizations/#{organization.login}/teams/#{team.id}")}= team.name
   - else
     %h3 Inloggen
     %p
