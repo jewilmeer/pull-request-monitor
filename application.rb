@@ -16,14 +16,14 @@ class Application < Sinatra::Base
   end
 
   get '/' do
-    p session[:access_token]
     @test = session[:access_token]
     @github = github
     haml :index
   end
 
+  # AUTH
   get '/login' do
-    redirect github.authorize_url :redirect_uri => 'http://localhost:9393/auth/callback', :scope => 'repo'
+    redirect github.authorize_url :redirect_uri => url('auth/callback'), :scope => 'repo'
   end
 
   get '/auth/callback' do
@@ -31,6 +31,18 @@ class Application < Sinatra::Base
     token = github.get_token authorization_code
     session[:access_token] = token.token
     redirect to('/')
+  end
+  # /AUTH
+
+  get '/teams/:id' do
+    @github = github
+    @team   = github.orgs.teams.get params[:id]
+    @repos  = github.orgs.teams.list_repos params[:id]
+    haml :team
+  end
+
+  get 'repos/:id' do
+    haml :repos
   end
 
   helpers do
@@ -42,8 +54,6 @@ class Application < Sinatra::Base
         end
         ENV['debug'] = 'true'
       end
-      p "session[:access_token]"
-      p session[:access_token]
       Github.new settings.github
     end
   end

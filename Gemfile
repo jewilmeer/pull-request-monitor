@@ -7,3 +7,6 @@ gem 'haml'
 
 # dev tools
 gem 'shotgun'
+
+# prod tools
+gem 'heroku'

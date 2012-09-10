@@ -1,0 +1,23 @@
+%hgroup
+  %h1
+    = @team.name
+    %small== #{@team.repos_count} projecten
+
+.row
+  .span4
+    %ul.nav.nav-list.well
+      - @repos.each do |repo|
+        - login = repo.owner.login
+        - pull_requests = github.pull_requests.list login, repo.name
+
+        %li
+          %a{href: url("repos/#{repo.id}")}
+            = repo.name
+            - nr_of_pulls = pull_requests.length
+            - if nr_of_pulls.zero?
+              %span.badge.pull-right.badge-success= nr_of_pulls
+            - else
+              %span.badge.pull-right.badge-warning= nr_of_pulls
+  .span8
+    - @repos.each do |repo|
+      %pre&= repo.inspect
