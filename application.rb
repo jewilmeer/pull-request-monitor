@@ -41,7 +41,7 @@ class Application < Sinatra::Base
     haml :team
   end
 
-  get 'repos/:id' do
+  get '/repos/:id' do
     haml :repos
   end
 
