@@ -1,5 +1,13 @@
 %hgroup
-  %h1 Awesomeness is not completed yet
+  %h1== Trekverzoeken van #{@repo.name}
 
-%p
-  %img{src: 'http://obsoletegamer.com/wp-content/uploads/2010/11/awesomeness.jpg'}
+.row
+  .span4
+    = partial :'repos/sidebar', locals: { repos: organization_repos(@organization) }
+  .span8
+    - pull_requests(@repo).each do |pull_request|
+      %ul.nav.nav-stacked.nav-tabs
+        %li
+          %a{href: url(pull_request.html_url)}
+            == ##{pull_request.number}
+            = pull_request.title
