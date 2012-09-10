@@ -14,6 +14,12 @@ class Application < Sinatra::Base
       client_secret: 'e7e55f9b39f3123341b1bd759f1087edc351bb5b'
     }
   end
+  configure :production do
+    set :github, {
+      client_id: '8e0a05cdfb50558d4ddb',
+      client_secret: '60c07b51bcd14955dc7b923b7f266bde5bec1dc5'
+    }
+  end
 
   get '/' do
     @test = session[:access_token]
