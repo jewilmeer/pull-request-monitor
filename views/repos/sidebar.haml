@@ -1,0 +1,10 @@
+%ul.nav.nav-list.well
+  - repos.each do |repo|
+    %li
+      %a{href: url("repos/#{repo.owner.login}/#{repo.id}")}
+        = repo.name
+        - nr_of_pulls = pull_requests(repo).length
+        - if nr_of_pulls.zero?
+          %span.badge.pull-right.badge-success= nr_of_pulls
+        - else
+          %span.badge.pull-right.badge-warning= nr_of_pulls

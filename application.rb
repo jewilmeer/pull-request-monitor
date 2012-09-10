@@ -1,6 +1,7 @@
 require 'sinatra'
 
 class Application < Sinatra::Base
+  register Sinatra::Partial
   configure do
     enable :sessions
     set :session_secret, "Awesomeness_ensured"
@@ -22,8 +23,6 @@ class Application < Sinatra::Base
   end
 
   get '/' do
-    @test = session[:access_token]
-    @github = github
     haml :index
   end
 
@@ -40,14 +39,15 @@ class Application < Sinatra::Base
   end
   # /AUTH
 
-  get '/teams/:id' do
-    @github = github
-    @team   = github.orgs.teams.get params[:id]
-    @repos  = github.orgs.teams.list_repos params[:id]
+  get '/organizations/:org_name/teams/:id' do
+    @team         = team(params[:id])
+    @organization = organization(params[:org_name])
     haml :team
   end
 
-  get '/repos/:id' do
+  get '/repos/:user/:repo' do
+    # @organization = organization(params[:user])
+    # @repo = repo(params[:user], params[:repo])
     haml :repos
   end
 
@@ -65,6 +65,35 @@ class Application < Sinatra::Base
         ENV['debug'] = 'true'
       end
       Github.new settings.github
+    end
+
+    def organizations
+      github.orgs.list
+    end
+
+    def organization_repos organization
+      github.repos.list :org => organization.login
+    end
+
+    def teams(organization)
+      github.organizations.teams.list organization.login
+    end
+
+    def team id
+      github.orgs.teams.get id
+    end
+
+    def organization org_name
+      github.orgs.get org_name
+    end
+
+    def pull_requests repo
+      login = repo.owner.login
+      github.pull_requests.list login, repo.name
+    end
+
+    def repo user, repo_name
+      github.repos.get user, repo_name
     end
   end
 end

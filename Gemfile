@@ -4,9 +4,12 @@ gem 'sinatra'
 gem 'github_api'
 gem 'sass'
 gem 'haml'
-
-# dev tools
-gem 'shotgun'
-
-# prod tools
+gem 'rack-pjax'
+gem 'sinatra-partial'
 gem 'heroku'
+
+group :development do
+  gem 'shotgun'
+end
+
+
