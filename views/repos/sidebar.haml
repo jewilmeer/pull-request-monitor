@@ -1,7 +1,7 @@
 %ul.nav.nav-list.well
   - repos.each do |repo|
     %li
-      %a{href: url("repos/#{repo.id}")}
+      %a{href: url("repos/#{repo.owner.login}/#{repo.id}")}
         = repo.name
         - nr_of_pulls = pull_requests(repo).length
         - if nr_of_pulls.zero?

@@ -45,7 +45,9 @@ class Application < Sinatra::Base
     haml :team
   end
 
-  get '/repos/:id' do
+  get '/repos/:user/:repo' do
+    # @organization = organization(params[:user])
+    # @repo = repo(params[:user], params[:repo])
     haml :repos
   end
 
@@ -88,6 +90,10 @@ class Application < Sinatra::Base
     def pull_requests repo
       login = repo.owner.login
       github.pull_requests.list login, repo.name
+    end
+
+    def repo user, repo_name
+      github.repos.get user, repo_name
     end
   end
 end
