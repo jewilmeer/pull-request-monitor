@@ -2,12 +2,19 @@
   %h1 Overzicht
 
 %section.well
-  %h3 Organisaties
-  %ul
-    - @github.orgs.list.each do |org|
-      %li
-        = org.login
-        %ul
-          - @github.orgs.teams.list org.login do |team|
-            %li
-              %a{href: url("/teams/#{team.id}")}= team.name
+  - if authorized?
+    %h3 Organisaties
+    %ul
+      - @github.orgs.list.each do |org|
+        %li
+          = org.login
+          %ul
+            - @github.orgs.teams.list org.login do |team|
+              %li
+                %a{href: url("/teams/#{team.id}")}= team.name
+  - else
+    %h3 Inloggen
+    %p
+      Eerst
+      %a{href: url('/login')} inloggen
+      , dan genietos

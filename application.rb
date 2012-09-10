@@ -52,6 +52,10 @@ class Application < Sinatra::Base
   end
 
   helpers do
+    def authorized?
+      !!session[:access_token]
+    end
+
     def github
       if session[:access_token]
         Github.configure do |config|
