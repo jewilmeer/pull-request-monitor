@@ -3,7 +3,13 @@
   %head
     %title Pull requests
     %link{rel: :stylesheet, type: 'text/css', href: url('/bootstrap/css/bootstrap.css')}
+    %script{:src => "/javascripts/jquery.js"}
+    %script{:src => "/javascripts/jquery.pjax.js"}
+    :javascript
+      $(function(){
+        $('a:not([data-remote]):not([data-behavior]):not([data-skip-pjax])').pjax('[data-pjax-container]')
+      })
 
   %body
-    .container
+    .container{"data-pjax-container" => ""}
       = yield
