@@ -7,6 +7,7 @@ gem 'haml'
 gem 'rack-pjax'
 gem 'sinatra-partial'
 gem 'heroku'
+gem 'moneta'
 
 group :development do
   gem 'shotgun'
