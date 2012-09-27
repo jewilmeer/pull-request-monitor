@@ -8,6 +8,6 @@
     - pull_requests(@repo).each do |pull_request|
       %ul.nav.nav-stacked.nav-tabs
         %li
-          %a{href: url(pull_request.html_url)}
+          %a{href: url(pull_request.html_url), target: '_blank'}
             == ##{pull_request.number}
             = pull_request.title
