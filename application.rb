@@ -86,44 +86,44 @@ class Application < Sinatra::Base
     end
 
     def organizations
-      cache('organizations', expires_in: 120) do
+      cache('organizations') do
         github.orgs.list
       end
     end
 
     def organization_repos(organization)
-      cache("organizations:#{organization.login}:repos", expires_in: 120) do
+      cache("organizations:#{organization.login}:repos", expires_in: 3600) do
         github.repos.list :org => organization.login
       end
     end
 
     def teams(organization)
-      cache("organizations:#{organization.login}:teams", expires_in: 120) do
+      cache("organizations:#{organization.login}:teams", expires_in: 3600) do
         github.organizations.teams.list(organization.login)
       end
     end
 
     def team(id)
-      cache("teams:#{id}", expires_in: 120) do
+      cache("teams:#{id}", expires_in: 3600) do
         github.orgs.teams.get id
       end
     end
 
     def organization(org_name)
-      cache("organizations:#{org_name}", expires_in: 120) do
+      cache("organizations:#{org_name}", expires_in: 3600) do
         github.orgs.get org_name
       end
     end
 
     def pull_requests(repo)
       login = repo.owner.login
-      cache("organizations:#{login}:repos:#{repo.name}:pull_requests", expires_in: 120) do
+      cache("organizations:#{login}:repos:#{repo.name}:pull_requests") do
         github.pull_requests.list login, repo.name
       end
     end
 
     def repo(user, repo_name)
-      cache("organizations:#{user}:repos:#{repo_name}", expires_in: 120) do
+      cache("organizations:#{user}:repos:#{repo_name}", expires_in: 3600) do
         github.repos.get user, repo_name
       end
     end
