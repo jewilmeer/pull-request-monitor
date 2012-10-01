@@ -8,7 +8,6 @@ class Application < Sinatra::Base
 
   before do
     @cache = settings.global_cache[session[:session_id]]
-    puts settings.global_cache.keys.inspect
   end
 
   configure do
@@ -62,10 +61,8 @@ class Application < Sinatra::Base
 
   helpers do
     def cache(key, options = {}, &block)
-      puts "cache(#{key.inspect}, #{options.inspect})"
       options = {expires_in: 60}.merge(options)
       @cache.fetch(key) do
-        puts "...needs work"
         @cache.store(key, block.call, options)
       end
     end
