@@ -114,9 +114,7 @@ class Application < Sinatra::Base
 
     def pull_requests(repo)
       login = repo.owner.login
-      cache("organizations:#{login}:repos:#{repo.name}:pull_requests") do
-        github.pull_requests.list login, repo.name
-      end
+      github.pull_requests.list login, repo.name
     end
 
     def repo(user, repo_name)
