@@ -1,7 +1,15 @@
 require 'sinatra'
+require 'moneta/memory'
 
 class Application < Sinatra::Base
   register Sinatra::Partial
+
+  set :global_cache, Hash.new{|h,k| h[k] = Moneta::Memory.new }
+
+  before do
+    @cache = settings.global_cache[session[:session_id]]
+  end
+
   configure do
     enable :sessions
     set :session_secret, "Awesomeness_ensured"
@@ -52,6 +60,13 @@ class Application < Sinatra::Base
   end
 
   helpers do
+    def cache(key, options = {}, &block)
+      options = {expires_in: 60}.merge(options)
+      @cache.fetch(key) do
+        @cache.store(key, block.call, options)
+      end
+    end
+
     def authorized?
       !!session[:access_token]
     end
@@ -68,32 +83,46 @@ class Application < Sinatra::Base
     end
 
     def organizations
-      github.orgs.list
+      cache('organizations') do
+        github.orgs.list
+      end
     end
 
-    def organization_repos organization
-      github.repos.list :org => organization.login
+    def organization_repos(organization)
+      cache("organizations:#{organization.login}:repos", expires_in: 3600) do
+        github.repos.list :org => organization.login
+      end
     end
 
     def teams(organization)
-      github.organizations.teams.list organization.login
+      cache("organizations:#{organization.login}:teams", expires_in: 3600) do
+        github.organizations.teams.list(organization.login)
+      end
     end
 
-    def team id
-      github.orgs.teams.get id
+    def team(id)
+      cache("teams:#{id}", expires_in: 3600) do
+        github.orgs.teams.get id
+      end
     end
 
-    def organization org_name
-      github.orgs.get org_name
+    def organization(org_name)
+      cache("organizations:#{org_name}", expires_in: 3600) do
+        github.orgs.get org_name
+      end
     end
 
-    def pull_requests repo
+    def pull_requests(repo)
       login = repo.owner.login
-      github.pull_requests.list login, repo.name
+      cache("organizations:#{login}:repos:#{repo.name}:pull_requests") do
+        github.pull_requests.list login, repo.name
+      end
     end
 
-    def repo user, repo_name
-      github.repos.get user, repo_name
+    def repo(user, repo_name)
+      cache("organizations:#{user}:repos:#{repo_name}", expires_in: 3600) do
+        github.repos.get user, repo_name
+      end
     end
   end
 end
