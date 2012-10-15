@@ -1,8 +1,10 @@
 require 'sinatra'
+require "sinatra/json"
 require 'moneta/memory'
 
 class Application < Sinatra::Base
   register Sinatra::Partial
+  helpers Sinatra::JSON
 
   set :global_cache, Hash.new{|h,k| h[k] = Moneta::Memory.new }
 
@@ -24,6 +26,7 @@ class Application < Sinatra::Base
     }
   end
   configure :production do
+    set :show_exceptions, false
     set :github, {
       client_id: '8e0a05cdfb50558d4ddb',
       client_secret: '60c07b51bcd14955dc7b923b7f266bde5bec1dc5'
@@ -32,6 +35,10 @@ class Application < Sinatra::Base
 
   get '/' do
     haml :index
+  end
+
+  get '/application.js' do
+    coffee :application
   end
 
   # AUTH
@@ -46,6 +53,35 @@ class Application < Sinatra::Base
     redirect to('/')
   end
   # /AUTH
+
+  # JSON
+  get '/organizations/:org_name/repos.json' do
+    organization = organization(params[:org_name])
+    repos = organization_repos(organization)
+
+    json repos.map {|repository| {
+      id: repository.id,
+      name: repository.name,
+      user: params[:org_name],
+      full_name: repository.full_name,
+      description: repository.description,
+      open_issues_count: repository.open_issues_count,
+      links: repository._links
+    } }
+  end
+
+  get '/pull_requests/:user/:repo.json' do
+    repo = repo params[:user], params[:repo]
+    pull = pull_requests(repo)
+
+    json pull.map {|pulling| {
+      id: pulling[:id],
+      title: pulling[:title],
+      body: pulling[:body],
+      links: pulling[:_links]
+    } }
+  end
+  # /JSON
 
   get '/organizations/:org_name/teams/:id' do
     @team         = team(params[:id])

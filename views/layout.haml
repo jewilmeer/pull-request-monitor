@@ -5,6 +5,11 @@
     %link{rel: :stylesheet, type: 'text/css', href: url('/bootstrap/css/bootstrap.min.css')}
     %link{rel: :stylesheet, type: 'text/css', href: url('/bootstrap/css/bootstrap-responsive.min.css')}
     %script{:src => "/javascripts/jquery.js"}
+    %script{:src => "/javascripts/underscore.min.js"}
+    %script{:src => "/javascripts/backbone.min.js"}
+    %script{:src => "/javascripts/backbone.eventbinder.min.js"}
+    %script{:src => "/javascripts/backbone.wreqr.min.js"}
+    %script{:src => "/javascripts/backbone.marionette.min.js"}
     %script{:src => "/javascripts/jquery.pjax.js"}
     :javascript
       $(function(){
@@ -14,3 +19,11 @@
   %body
     .container{"data-pjax-container" => ""}
       = yield
+    %script#tmp-emtpy-repo-item{type: :template}
+      Laden...
+    %script#tpl-repo-item{type: :template}
+      :plain
+        <a href="/repos/<%= full_name %>">
+          <%= name %>
+        </a>
+    %script{:src => "/application.js"}

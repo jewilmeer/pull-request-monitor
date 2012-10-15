@@ -2,8 +2,7 @@
   %h1== Trekverzoeken van #{@repo.name}
 
 .row
-  .span4
-    = partial :'repos/sidebar', locals: { repos: organization_repos(@organization) }
+  %aside.span4
   .span8
     - pull_requests(@repo).each do |pull_request|
       %ul.nav.nav-stacked.nav-tabs
