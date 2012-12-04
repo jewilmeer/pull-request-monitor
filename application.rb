@@ -81,6 +81,22 @@ class Application < Sinatra::Base
       links: pulling[:_links]
     } }
   end
+
+  # ember.js api
+  get '/organizations' do
+    orgs = organizations.map do |org|
+      {
+        id: org[:id],
+        login: org[:login]
+      }
+    end
+    json orgs
+  end
+
+  get '/organizations/:organization_name' do
+    json organization: organizations.find { |org| org[:login] == params[:organization_name] }
+  end
+
   # /JSON
 
   get '/organizations/:org_name/teams/:id' do

@@ -1,81 +1,70 @@
-App = new Backbone.Marionette.Application(
-  root: '/'
-)
+window.App = Ember.Application.create
+  # ApplicationView: Ember.View.extend
+  # ApplicationController: Ember.Controller.extend()
 
-App.addRegions
-  sidebar: 'aside'
+  # store: DS.Store.create
+  #   revision: 8
+  #   adapter: DS.RESTAdapter.create()
 
-App.Models = {}
-App.Collections = {}
-App.Views = {}
-App.instance_vars = {}
+  # Router: Ember.Router.extend
+  #   root:  Ember.Route.extend
+  #     index: Ember.Route.extend
+  #       root: '/'
 
-# ----- MODELS
-class App.Models.Organization extends Backbone.Model
-  initialize: (options) ->
-    {@name} = options
-    @repositories = new App.Collections.Repositories( organization: @)
-class App.Models.PullRequest extends Backbone.Model
-class App.Models.Repository extends Backbone.Model
-  defaults:
-    name: null
-    user: null
-    description: null
-    open_issues_count: null
-    links: null
-  initialize: (options) ->
-    if options.user && options.name
-      @pull_requests = new App.Collections.PullRequests(user: options.user, repo: options.name)
-      @pull_requests.fetch()
+  ready: ->
+    console.log 'Ember application loaded'
+    App.helloWorldView.append()
+    App.UserView.create().append()
 
-# ----- COLLECTIONS
-class App.Collections.Repositories extends Backbone.Collection
-  model: App.Models.Repository
-  url: ->
-    "/organizations/#{@organization.organization}/repos.json"
+# App.Organization = Ember.Object.extend
+#   login: ''
 
-class App.Collections.PullRequests extends Backbone.Collection
-  model: App.Models.PullRequest
-  url: ->
-    "/pull_requests/#{@user}/#{@repo}.json"
+# App.organizationsController = Ember.ArrayController.create
+#   content: []
+#   init: ->
+#     @pushObject(
+#       App.Organization.create
+#         login: 'henk'
+#     )
+#     @pushObject(
+#       App.Organization.create
+#         login: 'piet'
+#     )
+#     @pushObject(
+#       App.Organization.create
+#         login: 'klass'
+#     )
+#     @pushObject(
+#       App.Organization.create
+#         login: 'jan'
+#     )
+#     @pushObject(
+#       App.Organization.create
+#         login: 'sjaak'
+#     )
 
-  initialize: (options) ->
-    {@user, @repo} = options
+# App.OrganizationView = Ember.View.extend()
+# App.orgView = Ember.View.create().append()
 
-# ----- VIEWS
-class App.Views.EmptyRepoItem extends Backbone.Marionette.ItemView
-  template: '#tmp-emtpy-repo-item'
-class App.Views.RepoItem extends Backbone.Marionette.ItemView
-  tagName: 'li'
-  template: '#tpl-repo-item'
-  templateHelpers: () ->
-    nr_of_pull_requests: () ->
-      "1234"
-    nr_of_issues: () ->
-      "4567"
+App.helloWorldView = Ember.View.create
+  templateName: 'hello-world'
+  name: "Bob"
+  special: 'henk'
+  edit: ->
+    console.log 'henk henk'
 
-class App.Views.RepoListView extends Backbone.Marionette.CollectionView
-  itemView: App.Views.RepoItem
-  emptyView: App.Views.EmptyRepoItem
-  tagName: 'ul'
-  className: 'nav nav-list well'
+App.userController = Ember.Object.create
+  content: Ember.Object.create
+    firstName: "Albert"
+    lastName: "Hofmann"
+    posts: 25
+    hobbies: "Riding bicycles"
+    awesome: false
 
-App.addInitializer ->
-  @instance_vars.organization = new App.Models.Organization( name: 'InspireNL' )
-  @instance_vars.repositories = new App.Collections.Repositories()
-  @instance_vars.repositories.organization= organization: @instance_vars.organization.name
+App.UserView = Ember.View.extend
+  templateName: 'user'
+  firstNameBinding: 'App.userController.content.firstName'
+  lastNameBinding: 'App.userController.content.lastName'
 
-  # @instance_vars.repositories = new App.Collections.Repositories( organization: @instance_vars.organization )
-  console.log 'repositories', @instance_vars.repositories.length
-  # @sidebar.show(collection: @instance_vars.repositories)
-  @sidebar.show( new App.Views.RepoListView( collection: @instance_vars.repositories) )
-
-  @instance_vars.repositories.fetch( )
-
-App.addInitializer ->
-  console.log 'app starting'
-
-$ ->
-  # make app global
-  window.App = App
-  App.start()
+App.InfoView = Ember.View.extend
+  special: 'btn'

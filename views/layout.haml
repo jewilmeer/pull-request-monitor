@@ -4,26 +4,32 @@
     %title Pull requests
     %link{rel: :stylesheet, type: 'text/css', href: url('/bootstrap/css/bootstrap.min.css')}
     %link{rel: :stylesheet, type: 'text/css', href: url('/bootstrap/css/bootstrap-responsive.min.css')}
-    %script{:src => "/javascripts/jquery.js"}
-    %script{:src => "/javascripts/underscore.min.js"}
-    %script{:src => "/javascripts/backbone.min.js"}
-    %script{:src => "/javascripts/backbone.eventbinder.min.js"}
-    %script{:src => "/javascripts/backbone.wreqr.min.js"}
-    %script{:src => "/javascripts/backbone.marionette.min.js"}
-    %script{:src => "/javascripts/jquery.pjax.js"}
-    :javascript
-      $(function(){
-        $('a:not([data-remote]):not([data-behavior]):not([data-skip-pjax])').pjax('[data-pjax-container]')
-      })
-
-  %body
-    .container{"data-pjax-container" => ""}
-      = yield
-    %script#tmp-emtpy-repo-item{type: :template}
-      Laden...
-    %script#tpl-repo-item{type: :template}
-      :plain
-        <a href="/repos/<%= full_name %>">
-          <%= name %>
-        </a>
+    %script{:src => "/javascripts/lib/jquery-1.7.2.min.js"}
+    %script{:src => "/javascripts/lib/handlebars-1.0.0.beta.6.js"}
+    %script{:src => "/javascripts/lib/ember-1.0.0-pre.2.min.js"}
     %script{:src => "/application.js"}
+
+    %script{:type => 'text/x-handlebars', 'data-template-name' => 'hello-world'}
+      :plain
+        <p {{bindAttr class="special"}} {{action "edit"}}>
+          Hello {{name}}
+        </p>
+
+    %script{:type => 'text/x-handlebars', 'data-template-name' => 'user'}
+      :plain
+        User: {{firstName}} {{lastName}}
+        {{#view App.InfoView postsBinding="App.userController.content.posts"
+          hobbiesBinding="App.userController.content.hobbies" awesomeBinding="App.userController.content.awesome"}}
+          <b>Posts:</b> {{view.posts}}
+          <br>
+          <b>Hobbies:</b> {{view.hobbies}}
+          {{view Ember.Checkbox checkedBinding="view.awesome"}}
+          {{#if view.awesome}}
+            <span class="label">Awesome!</span>
+          {{else}}
+            <span class="label btn-important">Not awesome at all</span>
+          {{/if}}
+        {{/view}}
+  %body
+
+

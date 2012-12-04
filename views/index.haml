@@ -2,19 +2,21 @@
   %h1 Overzicht
 
 %section.well
-  - if authorized?
-    %h3 Organisaties
-    %ul
-      - organizations.each do |organization|
-        %li
-          = organization.login
-          %ul
-            - teams(organization).each do |team|
-              %li
-                %a{href: url("/organizations/#{organization.login}/teams/#{team.id}")}= team.name
-  - else
-    %h3 Inloggen
-    %p
-      Los
-      %a{href: url('/login')} inloggos
-      , dos genietos
+  -#
+    - if authorized?
+      %h3 Organisaties
+
+      %ul
+        - organizations.each do |organization|
+          %li
+            = organization.login
+            %ul
+              - teams(organization).each do |team|
+                %li
+                  %a{href: url("/organizations/#{organization.login}/teams/#{team.id}")}= team.name
+    - else
+      %h3 Inloggen
+      %p
+        Los
+        %a{href: url('/login')} inloggos
+        , dos genietos
