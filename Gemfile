@@ -10,5 +10,7 @@ gem 'heroku'
 gem 'moneta'
 
 group :development do
+  gem 'pry'
+  gem 'pry-debugger'
   gem 'shotgun'
 end
