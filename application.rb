@@ -4,12 +4,17 @@ require 'moneta/memory'
 
 class Application < Sinatra::Base
   register Sinatra::Partial
+  register Sinatra::Ember
   helpers Sinatra::JSON
 
   set :global_cache, Hash.new{|h,k| h[k] = Moneta::Memory.new }
 
   before do
     @cache = settings.global_cache[session[:session_id]]
+  end
+
+  ember do
+    templates '/javascripts/templates.js', ['app/templates/**/*.hbs'], :relative_to => 'app/templates'
   end
 
   configure do

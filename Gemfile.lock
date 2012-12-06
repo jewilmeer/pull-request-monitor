@@ -71,6 +71,8 @@ GEM
       rack-test
       sinatra (~> 1.3.0)
       tilt (~> 1.3)
+    sinatra-ember (0.0.2)
+      sinatra
     sinatra-partial (0.3.2)
       sinatra
     tilt (1.3.3)
@@ -89,4 +91,5 @@ DEPENDENCIES
   shotgun
   sinatra
   sinatra-contrib
+  sinatra-ember
   sinatra-partial
