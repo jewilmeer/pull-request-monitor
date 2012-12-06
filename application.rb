@@ -7,7 +7,8 @@ class Application < Sinatra::Base
   set :global_cache, Hash.new{|h,k| h[k] = Moneta::Memory.new }
 
   before do
-    @cache = settings.global_cache[session[:session_id]]
+    session[:cache_key] ||= SecureRandom.uuid
+    @cache = settings.global_cache[session[:cache_key]]
   end
 
   configure do
@@ -37,6 +38,11 @@ class Application < Sinatra::Base
   # AUTH
   get '/login' do
     redirect github.authorize_url :redirect_uri => url('auth/callback'), :scope => 'repo'
+  end
+
+  get '/logout' do
+    session.clear
+    redirect to('/')
   end
 
   get '/auth/callback' do
