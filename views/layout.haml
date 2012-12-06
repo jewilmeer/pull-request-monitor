@@ -15,22 +15,20 @@
         <p {{bindAttr class="special"}} {{action "edit"}}>
           Hello {{name}}
         </p>
-
-    %script{:type => 'text/x-handlebars', 'data-template-name' => 'user'}
-      :plain
-        User: {{firstName}} {{lastName}}
-        {{#view App.InfoView postsBinding="App.userController.content.posts"
-          hobbiesBinding="App.userController.content.hobbies" awesomeBinding="App.userController.content.awesome"}}
-          <b>Posts:</b> {{view.posts}}
-          <br>
-          <b>Hobbies:</b> {{view.hobbies}}
-          {{view Ember.Checkbox checkedBinding="view.awesome"}}
-          {{#if view.awesome}}
-            <span class="label">Awesome!</span>
-          {{else}}
-            <span class="label btn-important">Not awesome at all</span>
-          {{/if}}
-        {{/view}}
   %body
+    .navbar
+      .navbar-inner
+        %a.brand
+          Pull Request Monitor
+          &dash;
+          %small Dos genitos des pullos muchios
+    .row
 
+    .container
+      .row
+        .span4
+          %aside.well
+
+        .span8
+          %h1 Met je moeder
 
