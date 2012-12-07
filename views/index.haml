@@ -1,20 +1,21 @@
-%hgroup
-  %h1 Overzicht
-
-%section.well
-  - if authorized?
-    %h3 Organisaties
-    %ul
+- if authorized?
+  .page-header
+    %h1
+      Organizations
+      %small &dash; Choose a team
+  %section.well
+    %ul.nav.nav-list
       - organizations.each do |organization|
-        %li
-          = organization.login
-          %ul
-            - teams(organization).each do |team|
-              %li
-                %a{href: url("/organizations/#{organization.login}/teams/#{team.id}")}= team.name
-  - else
-    %h3 Inloggen
-    %p
-      Los
-      %a{href: url('/login')} inloggos
-      , dos genietos
+        %li.nav-header= organization.login
+        - teams(organization).each do |team|
+          %li
+            %a{href: url("/organizations/#{organization.login}/teams/#{team.id}")}= team.name
+- else
+  .hero-unit
+    .page-header
+      %h1
+        Login
+        %small &dash; Inloggos via Github los ganos
+    .row
+      .span3
+        %a{href: url('/login'), class: 'btn btn-block btn-large'} Inloggos
