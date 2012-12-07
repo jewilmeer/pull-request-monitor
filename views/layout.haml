@@ -17,11 +17,11 @@
         %a.brand{href: '/'}
           Pull Request Monitor
           %small &dash; Pull requestos dos genitos muchos
-
-        .pull-right
-          %a{href:'/logout', class: :btn}
-            Logout
-            %i.icon-remove-circle
+        - if authenticated?
+          .pull-right
+            %a{href:'/logout', class: :btn}
+              Logout
+              %i.icon-remove-circle
 
     .container{"data-pjax-container" => ""}
       = yield

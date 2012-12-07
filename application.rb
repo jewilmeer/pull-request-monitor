@@ -73,7 +73,7 @@ class Application < Sinatra::Base
       end
     end
 
-    def authorized?
+    def authenticated?
       !!session[:access_token]
     end
 
