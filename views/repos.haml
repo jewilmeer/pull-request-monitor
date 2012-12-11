@@ -5,9 +5,13 @@
   .span4
     = partial :'repos/sidebar', locals: { repos: organization_repos(@organization) }
   .span8
-    %ul.nav.nav-tabs.nav-stacked
-      - pull_requests(@repo).each do |pull_request|
-        %li
-          %a{href: url(pull_request.html_url), target: '_blank'}
-            == ##{pull_request.number}
-            = pull_request.title
+    - if pull_requests(@repo).any?
+      %ul.nav.nav-tabs.nav-stacked
+        - pull_requests(@repo).each do |pull_request|
+          %li
+            %a{href: url(pull_request.html_url), target: '_blank'}
+              == ##{pull_request.number}
+              = pull_request.title
+    - else
+      %h3 No pullos too gaanos!
+      %img{src: '/images/dancing_panda.gif', width: '400px'}
